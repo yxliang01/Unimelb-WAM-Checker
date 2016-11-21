@@ -1,0 +1,18 @@
+{
+  "name": "unimelb_wam update checker",
+  "authors": [
+    "yxliang01 <13267.okk@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -69,8 +69,17 @@ function setTargetTab(tab) {
 }
 
 function CheckWAM() {
-    if (targetTab === undefined || targetTab.status !== "complete")
+
+    if (targetTab === undefined)
         return;
+
+    if (targetTab.status !== "complete")
+        return;
+
+    if (targetTab.url.indexOf("https://prod.ss.unimelb.edu.au/student/SM/ResultsDtls") === -1) {
+        stopMonitoring();
+        return;
+    }
 
     chrome.tabs.sendMessage(targetTab.id, "Find Result", undefined, function(response) {
         if (response === null) {
@@ -88,6 +97,8 @@ function CheckWAM() {
     });
 
     chrome.tabs.reload(targetTab.id);
+
+
 }
 
 function setCurrentMark(mark) {

@@ -3,5 +3,5 @@ This extension will notify you when your WAM has been changed. Currently, only f
 
 
 # Major Contributors
-Xiao Liang Yu - the main leading developer and creator
+Xiao Liang Yu - leader of the team & the main leading developer & the creator of this project
 Taicheng Zhou - the logo and promote images

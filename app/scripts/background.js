@@ -9,6 +9,7 @@ const alarm_callback = {
 
 let targetTab;
 let lastResult;
+let notifyOnlyWhenIncrease;
 
 chrome.alarms.onAlarm.addListener(onAlarm);
 chrome.notifications.onButtonClicked.addListener(function onNotificationButtonClicked(notificationId, buttonIndex) {
@@ -34,7 +35,7 @@ function onAlarm(alarm) {
 }
 
 chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
+  function (msg, sender, sendResponse) {
     chrome.tabs.query({
       "url": ["https://prod.ss.unimelb.edu.au/student/SM/ResultsDtls*"]
     }, function findTarget(tabs) {
@@ -44,11 +45,12 @@ chrome.runtime.onMessage.addListener(
         return;
       }
 
-      tabs.some(function(tab, idx) {
-        chrome.tabs.sendMessage(tab.id, "Find Result", undefined, function(response) {
+      tabs.some(function (tab, idx) {
+        chrome.tabs.sendMessage(tab.id, "Find Result", undefined, (response) => {
           if (targetTab === undefined) {
             if (response !== null) {
               setTargetTab(tab);
+              notifyOnlyWhenIncrease = msg.notifyOnlyWhenIncrease;
               sendResponse(true);
               return true;
             } else if (idx === tabs.length - 1) sendResponse(false);
@@ -85,22 +87,23 @@ function CheckWAM() {
     return;
   }
 
-  chrome.tabs.sendMessage(targetTab.id, "Find Result", undefined, function(response) {
-    if (response === null) {
+  chrome.tabs.sendMessage(targetTab.id, "Find Result", undefined, function (response) {
+    if (response === null || response === undefined) {
       setTargetTab(undefined);
       return;
     }
 
+    chrome.tabs.reload(targetTab.id);
     if (lastResult === undefined) {
       setCurrentMark(response);
     } else if (lastResult !== response) {
-      notifyUser();
+      if (!notifyOnlyWhenIncrease || lastResult < response) {
+        notifyUser();
+      }
       setCurrentMark(response);
     }
 
   });
-
-  chrome.tabs.reload(targetTab.id);
 
 
 }

@@ -1,6 +1,6 @@
 {
   "name": "Unimelb-WAM-Checker",
-  "private": true,
+  "private": false,
   "version": "2.0.0",
   "description": "This extension will notify you when your WAM has been changed.",
   "scripts": {
